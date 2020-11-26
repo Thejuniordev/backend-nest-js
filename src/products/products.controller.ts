@@ -15,7 +15,7 @@ export class ProductsController {
     }
 
     @Get(':id')
-    async getById(@Param('id') id: number) : Promise<Product> {
+    async getById(@Param('id') id: string) : Promise<Product> {
         return this.productService.getById(id);
     }
 
@@ -25,13 +25,12 @@ export class ProductsController {
     }
 
     @Put()
-    async update(@Param('id') id: number, @Body() product: Product): Promise<Product> {
-        product.id = id;
-        return this.productService.update(product);
+    async update(@Param('id') id: string, @Body() product: Product): Promise<Product> {
+        return this.productService.update(id, product);
     }
 
     @Delete(':id')
-    async delete(@Param('id') id: number) {
+    async delete(@Param('id') id: string) {
         this.productService.delete(id)
     }
 }

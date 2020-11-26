@@ -1,50 +1,33 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { Product } from './product';
 
 @Injectable()
 export class ProductService {
-    products: Product[] = [
-        { id: 1, available: true, name: "garrafa"},
-        { id: 2, available: false, name: "copo"},
-        { id: 3, available: true, name: "mesa"},
-        { id: 4, available: false, name: "fone"},
-        { id: 5, available: true, name: "cadeira"}
-    ];
+    
+    constructor(@InjectModel('Product') private readonly productModel: Model<Product>) {}
 
-    getAll() {
-        return this.products;
+    async getAll() {
+        return await this.productModel.find().exec();
     }
 
-    getById(id: number) {
-        const product = this.products.find((value) => value.id == id );
-        return product;
+    async getById(id: string) {
+        return await this.productModel.findById(id).exec();
     }
 
-    create(product: Product) {
-        let lastId = 0;
-        if (this.products.length > 0) {
-            lastId = this.products[this.products.length - 1].id;
-        }
-
-        product.id = lastId + 1;
-        this.products.push(product);
-
-        return product;
+    async create(product: Product) {
+        const createdProduct = new this.productModel(product);
+        return await createdProduct.save();
     }
 
-    update(product: Product) {
-        const productArray = this.getById(product.id);
-        if (productArray) {
-            productArray.available = product.available;
-            productArray.name = product.name;
-        }
-
-        return productArray;
+    async update(id: string, product: Product) {
+       await this.productModel.updateOne({ _id: id }, product).exec()
+       return this.getById(id)
     }
 
-    delete(id: number) {
-        const index = this.products.findIndex((value) => value.id == id);
-        this.products.splice(index, 1);
+    async delete(id: string) {
+        return await this.productModel.deleteOne({ _id: id }).exec()
     }
 
 }
