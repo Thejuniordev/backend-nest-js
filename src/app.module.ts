@@ -1,3 +1,4 @@
+import { AuthModule } from './auth/auth.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -8,7 +9,8 @@ import { MongooseModule } from '@nestjs/mongoose'
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb+srv://db_user:uSXJiGzQfj8lOXBX@clusterecommerce.nyzc8.mongodb.net/ecommercedb?retryWrites=true&w=majority'),
-    ProductsModule
+    ProductsModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
