@@ -1,10 +1,16 @@
-import { AuthService } from './shared/auth.service';
+import { AuthController } from './auth.controller';
 import { Module } from '@nestjs/common';
+import { AuthService } from './shared/auth.service';
+import { UsersModule } from 'src/users/users.module';
+import { LocalStrategy } from './shared/local.strategy';
 
 @Module({
-    imports: [],
-    controllers: [],
+    imports: [UsersModule],
+    controllers: [
+        AuthController, ],
     providers: [
-        AuthService, ],
+        AuthService,
+        LocalStrategy
+    ],
 })
 export class AuthModule {}
