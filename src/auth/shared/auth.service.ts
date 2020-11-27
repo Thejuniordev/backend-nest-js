@@ -4,26 +4,26 @@ import { UsersService } from 'src/users/shared/users.service';
 
 @Injectable()
 export class AuthService {
-    
-    constructor(
-        private usersService: UsersService,
-        private jwtService: JwtService
-    ) { }
 
-    async validateUser(userEmail: string, userPassword: string) {
-        const user = await this.usersService.getByEmail(userEmail);
-        if (user && user.password === userPassword) {
-            const { _id, name, email } = user;
-            return { id: _id, name, email };
-        }
+  constructor(
+    private usersService: UsersService,
+    private jwtService: JwtService,
+  ) { }
 
-        return null;
+  async validateUser(userEmail: string, userPassword: string) {
+    const user = await this.usersService.getByEmail(userEmail);
+    if (user && user.password === userPassword) {
+      const { _id, name, email } = user;
+      return { id: _id, name, email };
     }
 
-    async login(user: any) {
-        const payload = { email: user.email, sub: user.id };
-        return {
-            access_token: this.jwtService.sign(payload),
-        };
-    }
+    return null;
+  }
+
+  async login(user: any) {
+    const payload = { email: user.email, sub: user.id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
 }
